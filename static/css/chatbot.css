@@ -1,0 +1,119 @@
+.chatbot-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.chatbot-button {
+    background: #a61818;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.chatbot-popup {
+    display: none;
+    flex-direction: column;
+    width: 300px;
+    max-height: 500px;
+    background: #1f1f1f;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0,0,0,0.7);
+    color: white;
+}
+
+.chatbot-header {
+    background: #ff0040;
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.chatbot-chat-window {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: #121212;
+}
+
+.chat-message {
+    max-width: 80%;
+    padding: 8px 12px;
+    border-radius: 18px;
+    font-size: 14px;
+    animation: fadeIn 0.3s ease;
+}
+
+.chat-message.user {
+    align-self: flex-end;
+    background-color: #6c6f71;
+    color: white;
+}
+
+.chat-message.bot {
+    align-self: flex-start;
+    background-color: #333;
+    color: white;
+}
+
+.chat-message.typing {
+    font-style: italic;
+    opacity: 0.7;
+}
+
+.chatbot-questions {
+    padding: 10px;
+    background: #1b1b1b;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+}
+
+.chatbot-question {
+    background: #444;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background 0.3s ease;
+}
+
+.chatbot-question:hover {
+    background: #666;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.logo img {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  box-shadow: 0 0 12px 4px rgba(255, 0, 0, 0.7); /* Glowing red shadow */
+  transition: box-shadow 0.3s ease;
+}
+
+.logo img:hover {
+  box-shadow: 0 0 20px 8px rgba(255, 0, 0, 0.9); /* Stronger glow on hover */
+}
+* {
+  transition: all 0.3s ease;
+}

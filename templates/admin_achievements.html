@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Achievements</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Manage Achievements</h1>
+
+    <form action="{{ url_for('manage_achievements') }}" method="POST" enctype="multipart/form-data">
+        <input type="text" name="title" placeholder="Title" required><br>
+        <textarea name="description" placeholder="Description" required></textarea><br>
+        <input type="file" name="certificate" accept=".pdf,.png,.jpg,.jpeg"><br>
+        <button type="submit">Add Achievement</button>
+    </form>
+
+    <h2>Uploaded Achievements</h2>
+    {% if achievements %}
+        <ul>
+            {% for achievement in achievements %}
+                <li>
+                    <strong>{{ achievement.title }}</strong><br>
+                    {{ achievement.description }}<br>
+                    {% if achievement.certificate_filename %}
+                        <a href="{{ url_for('static', filename='certificates/' ~ achievement.certificate_filename) }}" target="_blank">
+                            View Certificate
+                        </a>
+                    {% else %}
+                        <em>No certificate uploaded</em>
+                    {% endif %}
+                </li>
+                <hr>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No achievements uploaded yet.</p>
+    {% endif %}
+</body>
+</html>
