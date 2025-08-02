@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: portfolio-app
+    env: python
+    plan: free
+    buildCommand: ""
+    startCommand: gunicorn app:app
+    envVars:
+      - key: EMAIL_USER
+        value: swarooprout9848@gmail.com
+      - key: EMAIL_PASS
+        value: rinku9848
+      - key: EMAIL_RECEIVER
+        value: swarooprout9848@gmail.com
