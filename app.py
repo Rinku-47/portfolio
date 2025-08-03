@@ -14,18 +14,19 @@ app.secret_key = 'your_secret_key'
 
 load_dotenv()
 
-# MySQL connection
+# ✅ Database connection
 try:
     db = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="rinku9848",
-        database="portfolio_db"
+        host=os.environ.get("DB_HOST"),
+        user=os.environ.get("DB_USER"),
+        password=os.environ.get("DB_PASSWORD"),
+        database=os.environ.get("DB_NAME")
     )
-except Exception as e:
-    print("❌ Database connection failed:", e)
+except mysql.connector.Error as err:
+    print(f"❌ Database connection failed: {err}")
+    db = None
 
-# Login setup
+# ✅ Flask-Login setup
 login_manager = LoginManager()
 login_manager.login_view = 'login'
 login_manager.init_app(app)
@@ -38,6 +39,8 @@ class User(UserMixin):
 
 @login_manager.user_loader
 def load_user(user_id):
+    if not db:
+        return None
     cursor = db.cursor(dictionary=True)
     cursor.execute("SELECT * FROM users WHERE id=%s", (user_id,))
     user = cursor.fetchone()
@@ -48,14 +51,16 @@ def load_user(user_id):
 
 @app.route('/')
 def index():
+    if not db:
+        return "Database not connected", 500
     cursor = db.cursor(dictionary=True)
     cursor.execute("SELECT * FROM achievements ORDER BY id DESC")
     achievements = cursor.fetchall()
 
     cursor.execute("SELECT * FROM projects ORDER BY id DESC")
     projects = cursor.fetchall()
-
     cursor.close()
+
     return render_template('index.html', achievements=achievements, projects=projects)
 
 @app.route('/contact', methods=['POST'])
@@ -171,7 +176,6 @@ def manage_achievements():
             "INSERT INTO achievements (title, description, certificate_filename) VALUES (%s, %s, %s)",
             (title, description, filename)
         )
-
         db.commit()
         flash("Achievement added successfully!", "success")
 
