@@ -19,9 +19,39 @@ load_dotenv()
 
 # ✅ SQLite database connection
 def get_db_connection():
-    conn = sqlite3.connect('portfolio.db')
+    conn = sqlite3.connect('portfolio.db', check_same_thread=False)
     conn.row_factory = sqlite3.Row
     return conn
+
+# ✅ Create tables if not exists
+def init_db():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute('''CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT UNIQUE,
+        password_hash TEXT
+    )''')
+    cursor.execute('''CREATE TABLE IF NOT EXISTS feedbacks (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
+        email TEXT,
+        message TEXT
+    )''')
+    cursor.execute('''CREATE TABLE IF NOT EXISTS achievements (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT,
+        description TEXT,
+        certificate_filename TEXT
+    )''')
+    cursor.execute('''CREATE TABLE IF NOT EXISTS projects (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT,
+        description TEXT,
+        link TEXT
+    )''')
+    conn.commit()
+    conn.close()
 
 # ✅ Flask-Login setup
 login_manager = LoginManager()
@@ -36,23 +66,25 @@ class User(UserMixin):
 
 @login_manager.user_loader
 def load_user(user_id):
-    db = get_db()
+    db = get_db_connection()
     cursor = db.cursor()
     cursor.execute("SELECT * FROM users WHERE id = ?", (user_id,))
     user = cursor.fetchone()
+    db.close()
     if user:
         return User(user["id"], user["username"], user["password_hash"])
     return None
 
 @app.route('/')
 def index():
-    db = get_db()
+    db = get_db_connection()
     cursor = db.cursor()
     cursor.execute("SELECT * FROM achievements ORDER BY id DESC")
     achievements = cursor.fetchall()
 
     cursor.execute("SELECT * FROM projects ORDER BY id DESC")
     projects = cursor.fetchall()
+    db.close()
     return render_template('index.html', achievements=achievements, projects=projects)
 
 @app.route('/contact', methods=['POST'])
@@ -85,10 +117,11 @@ def contact():
         return redirect(url_for('index'))
 
     try:
-        db = get_db()
+        db = get_db_connection()
         cursor = db.cursor()
         cursor.execute("INSERT INTO feedbacks (name, email, message) VALUES (?, ?, ?)", (name, email, message))
         db.commit()
+        db.close()
         print("✅ Feedback saved in database!")
         flash("Message sent and saved successfully!", "success")
     except Exception as e:
@@ -103,10 +136,11 @@ def login():
         username = request.form['username']
         password = request.form['password']
 
-        db = get_db()
+        db = get_db_connection()
         cursor = db.cursor()
         cursor.execute("SELECT * FROM users WHERE username = ?", (username,))
         user = cursor.fetchone()
+        db.close()
 
         if user and check_password_hash(user['password_hash'], password):
             login_user(User(user['id'], user['username'], user['password_hash']))
@@ -132,10 +166,11 @@ def admin_dashboard():
 @app.route('/admin/feedbacks')
 @login_required
 def view_feedbacks():
-    db = get_db()
+    db = get_db_connection()
     cursor = db.cursor()
     cursor.execute("SELECT * FROM feedbacks ORDER BY id DESC")
     feedbacks = cursor.fetchall()
+    db.close()
     return render_template('admin_feedbacks.html', feedbacks=feedbacks)
 
 def allowed_file(filename):
@@ -144,7 +179,7 @@ def allowed_file(filename):
 @app.route('/admin/achievements', methods=['GET', 'POST'])
 @login_required
 def manage_achievements():
-    db = get_db()
+    db = get_db_connection()
     cursor = db.cursor()
 
     if request.method == 'POST':
@@ -163,14 +198,16 @@ def manage_achievements():
             (title, description, filename)
         )
         db.commit()
-        flash("Achievement added successfully!", "success")
 
     cursor.execute("SELECT * FROM achievements ORDER BY id DESC")
     achievements = cursor.fetchall()
+    db.close()
     return render_template('admin_achievements.html', achievements=achievements)
 
 if __name__ == '__main__':
     if not os.path.exists(UPLOAD_FOLDER):
         os.makedirs(UPLOAD_FOLDER)
+    init_db()
     app.run(debug=True)
+
 
