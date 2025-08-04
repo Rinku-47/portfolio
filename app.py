@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, flash, url_for
-import mysql.connector
+import sqlite3
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -11,20 +11,17 @@ from werkzeug.security import check_password_hash
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
+UPLOAD_FOLDER = 'static/certificates'
+ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg'}
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 load_dotenv()
 
-# ✅ Database connection
-try:
-    db = mysql.connector.connect(
-        host=os.environ.get("DB_HOST"),
-        user=os.environ.get("DB_USER"),
-        password=os.environ.get("DB_PASSWORD"),
-        database=os.environ.get("DB_NAME")
-    )
-except mysql.connector.Error as err:
-    print(f"❌ Database connection failed: {err}")
-    db = None
+# ✅ SQLite database connection
+def get_db_connection():
+    conn = sqlite3.connect('portfolio.db')
+    conn.row_factory = sqlite3.Row
+    return conn
 
 # ✅ Flask-Login setup
 login_manager = LoginManager()
@@ -39,28 +36,23 @@ class User(UserMixin):
 
 @login_manager.user_loader
 def load_user(user_id):
-    if not db:
-        return None
-    cursor = db.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM users WHERE id=%s", (user_id,))
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM users WHERE id = ?", (user_id,))
     user = cursor.fetchone()
-    cursor.close()
     if user:
-        return User(user['id'], user['username'], user['password_hash'])
+        return User(user["id"], user["username"], user["password_hash"])
     return None
 
 @app.route('/')
 def index():
-    if not db:
-        return "Database not connected", 500
-    cursor = db.cursor(dictionary=True)
+    db = get_db()
+    cursor = db.cursor()
     cursor.execute("SELECT * FROM achievements ORDER BY id DESC")
     achievements = cursor.fetchall()
 
     cursor.execute("SELECT * FROM projects ORDER BY id DESC")
     projects = cursor.fetchall()
-    cursor.close()
-
     return render_template('index.html', achievements=achievements, projects=projects)
 
 @app.route('/contact', methods=['POST'])
@@ -93,13 +85,10 @@ def contact():
         return redirect(url_for('index'))
 
     try:
+        db = get_db()
         cursor = db.cursor()
-        cursor.execute(
-            "INSERT INTO feedbacks (name, email, message) VALUES (%s, %s, %s)",
-            (name, email, message)
-        )
+        cursor.execute("INSERT INTO feedbacks (name, email, message) VALUES (?, ?, ?)", (name, email, message))
         db.commit()
-        cursor.close()
         print("✅ Feedback saved in database!")
         flash("Message sent and saved successfully!", "success")
     except Exception as e:
@@ -114,10 +103,10 @@ def login():
         username = request.form['username']
         password = request.form['password']
 
-        cursor = db.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM users WHERE username=%s", (username,))
+        db = get_db()
+        cursor = db.cursor()
+        cursor.execute("SELECT * FROM users WHERE username = ?", (username,))
         user = cursor.fetchone()
-        cursor.close()
 
         if user and check_password_hash(user['password_hash'], password):
             login_user(User(user['id'], user['username'], user['password_hash']))
@@ -143,15 +132,11 @@ def admin_dashboard():
 @app.route('/admin/feedbacks')
 @login_required
 def view_feedbacks():
-    cursor = db.cursor(dictionary=True)
+    db = get_db()
+    cursor = db.cursor()
     cursor.execute("SELECT * FROM feedbacks ORDER BY id DESC")
     feedbacks = cursor.fetchall()
-    cursor.close()
     return render_template('admin_feedbacks.html', feedbacks=feedbacks)
-
-UPLOAD_FOLDER = 'static/certificates'
-ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg'}
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -159,7 +144,8 @@ def allowed_file(filename):
 @app.route('/admin/achievements', methods=['GET', 'POST'])
 @login_required
 def manage_achievements():
-    cursor = db.cursor(dictionary=True)
+    db = get_db()
+    cursor = db.cursor()
 
     if request.method == 'POST':
         title = request.form['title']
@@ -173,7 +159,7 @@ def manage_achievements():
             file.save(save_path)
 
         cursor.execute(
-            "INSERT INTO achievements (title, description, certificate_filename) VALUES (%s, %s, %s)",
+            "INSERT INTO achievements (title, description, certificate_filename) VALUES (?, ?, ?)",
             (title, description, filename)
         )
         db.commit()
@@ -181,10 +167,10 @@ def manage_achievements():
 
     cursor.execute("SELECT * FROM achievements ORDER BY id DESC")
     achievements = cursor.fetchall()
-    cursor.close()
     return render_template('admin_achievements.html', achievements=achievements)
 
 if __name__ == '__main__':
     if not os.path.exists(UPLOAD_FOLDER):
         os.makedirs(UPLOAD_FOLDER)
     app.run(debug=True)
+
