@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Swaroop | Portfolio</title>
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo.jpg') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/chatbot.css') }}">
-</head>
-<body>
+  <meta charset="UTF-8">
+  <title>Swaroop | Portfolio</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo.jpg') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/chatbot.css') }}">
+
 
 <header class="site-header">
   <div class="nav-container">
@@ -20,36 +19,37 @@
         <li><a href="#about">About</a></li>
         <li><a href="#projects">Projects</a></li>
         <li><a href="#contact">Contact</a></li>
+        <li><a href="#achievements">Achievements</a></li>
       </ul>
     </nav>
   </div>
 </header>
 
 <header class="hero">
-    <div class="floating-logos">
-        <img src="{{ url_for('static', filename='images/css.svg') }}" class="floating-logo" style="top: 10%; left: 15%;">
-        <img src="{{ url_for('static', filename='images/html.svg') }}" class="floating-logo" style="top: 25%; left: 70%;">
-        <img src="{{ url_for('static', filename='images/flask1.svg') }}" class="floating-logo" style="top: 50%; left: 80%;">
-        <img src="{{ url_for('static', filename='images/js.svg') }}" class="floating-logo" style="top: 40%; left: 20%;">
-        <img src="{{ url_for('static', filename='images/python.svg') }}" class="floating-logo" style="top: 15%; left: 55%;">
-        <img src="{{ url_for('static', filename='images/davinci.svg') }}" class="floating-logo" style="top: 60%; left: 10%;">
-        <img src="{{ url_for('static', filename='images/mysql.svg') }}" class="floating-logo" style="top: 75%; left: 40%;">
-        <img src="{{ url_for('static', filename='images/mongodb.svg') }}" class="floating-logo" style="top: 30%; left: 85%;">
-        <img src="{{ url_for('static', filename='images/github.svg') }}" class="floating-logo" style="top: 65%; left: 65%;">
-        <img src="{{ url_for('static', filename='images/ae.svg') }}" class="floating-logo" style="top: 80%; left: 25%;">
-        <img src="{{ url_for('static', filename='images/ps.svg') }}" class="floating-logo" style="top: 35%; left: 50%;">
-    </div>
+  <div class="floating-logos">
+    <img src="{{ url_for('static', filename='images/css.svg') }}" class="floating-logo" style="top: 10%; left: 15%;">
+    <img src="{{ url_for('static', filename='images/html.svg') }}" class="floating-logo" style="top: 25%; left: 70%;">
+    <img src="{{ url_for('static', filename='images/flask1.svg') }}" class="floating-logo" style="top: 50%; left: 80%;">
+    <img src="{{ url_for('static', filename='images/js.svg') }}" class="floating-logo" style="top: 40%; left: 20%;">
+    <img src="{{ url_for('static', filename='images/python.svg') }}" class="floating-logo" style="top: 15%; left: 55%;">
+    <img src="{{ url_for('static', filename='images/davinci.svg') }}" class="floating-logo" style="top: 60%; left: 10%;">
+    <img src="{{ url_for('static', filename='images/mysql.svg') }}" class="floating-logo" style="top: 75%; left: 40%;">
+    <img src="{{ url_for('static', filename='images/mongodb.svg') }}" class="floating-logo" style="top: 30%; left: 85%;">
+    <img src="{{ url_for('static', filename='images/github.svg') }}" class="floating-logo" style="top: 65%; left: 65%;">
+    <img src="{{ url_for('static', filename='images/ae.svg') }}" class="floating-logo" style="top: 80%; left: 25%;">
+    <img src="{{ url_for('static', filename='images/ps.svg') }}" class="floating-logo" style="top: 35%; left: 50%;">
+  </div>
 
-    <div class="container">
-        <img src="{{ url_for('static', filename='images/profile.jpg') }}" alt="Rinku Hero Image" class="hero-image">
-        <h1>Hello, I'm <span>Swaroop</span></h1>
-        <p>A passionate Developer & Video Editor</p>
-        <div class="hero-icons">
-            <i class="fas fa-code fa-spin"></i>
-            <i class="fas fa-video fa-bounce"></i>
-            <i class="fas fa-laptop-code fa-beat"></i>
-        </div>
+  <div class="container">
+    <img src="{{ url_for('static', filename='images/profile.jpg') }}" alt="Rinku Hero Image" class="hero-image">
+    <h1>Hello, I'm <span>Swaroop</span></h1>
+    <p>A passionate Developer & Video Editor</p>
+    <div class="hero-icons">
+      <i class="fas fa-code fa-spin"></i>
+      <i class="fas fa-video fa-bounce"></i>
+      <i class="fas fa-laptop-code fa-beat"></i>
     </div>
+  </div>
 </header>
 
 <section class="about" id="about">
@@ -76,7 +76,8 @@
         </div>
       </div>
     </div>
-        <div class="resume-download">
+
+    <div class="resume-download">
       <a href="{{ url_for('static', filename='files/swaroop.pdf') }}" download class="btn-download">
         📄 Download Resume
       </a>
@@ -84,10 +85,9 @@
   </div>
 </section>
 
+<section id="skills">
+  <h2>OTHER SKILLS  </h2>
 
-
-  <section id="skills">
-  <h2>My Skills</h2>
   <div class="skills-container">
     <div class="skill-card">
       <img src="{{ url_for('static', filename='images/videoedit.gif') }}" alt="Skill 1">
@@ -108,68 +108,54 @@
   </div>
 </section>
 
-
 <section class="projects" id="projects">
   <div class="container">
-    <h2>My Projects</h2>
+    <h1>MY PROJECTS</h1>
+    
     <div class="project-grid">
-      {% if projects %}
-        {% for project in projects %}
-          <div class="project-card">
-            <h3>{{ project.title }}</h3>
-            <p>{{ project.description }}</p>
-            {% if project.github_url %}
-              <a href="{{ project.github_url }}" target="_blank" class="project-btn">View Project</a>
-            {% endif %}
-          </div>
-        {% endfor %}
-      {% else %}
-        <p>No projects available right now.</p>
-      {% endif %}
+      <div class="project-card">
+        <h3>Object-Detector</h3>
+        <p>Real-time object detection system using YOLOv5 and OpenCV with custom training and GPU optimization.</p>
+        <a href="https://github.com/Rinku-47/Object-Detector.git" target="_blank" class="project-btn">View Project</a>
+      </div>
 
       <div class="project-card">
         <h3>Project 2</h3>
         <p>Coming Soon...</p>
-        <a href="#" class="project-btn disabled" style="pointer-events: none; opacity: 0.6;">View Project</a>
+        <a href="#" class="project-btn disabled">View Project</a>
       </div>
+
       <div class="project-card">
         <h3>Project 3</h3>
         <p>Coming Soon...</p>
-        <a href="#" class="project-btn disabled" style="pointer-events: none; opacity: 0.6;">View Project</a>
+        <a href="#" class="project-btn disabled">View Project</a>
       </div>
     </div>
+    
   </div>
 </section>
-
 
 <section id="achievements">
-  <h2>Achievements & Certificates</h2>
-  <div class="achievement-container" style="margin-top: 30px;">
-    {% for achievement in achievements %}
-      <div class="achievement-card">
-        <h3>{{ achievement.title }}</h3>
-        <p>{{ achievement.description }}</p>
-        {% if achievement.certificate_filename %}
-          {% if achievement.certificate_filename.endswith('.pdf') %}
-            <iframe 
-              src="{{ url_for('static', filename='certificates/' + achievement.certificate_filename) }}" 
-              width="100%" 
-              height="300px">
-            </iframe>
-          {% else %}
-            <img 
-              src="{{ url_for('static', filename='certificates/' + achievement.certificate_filename) }}" 
-              alt="Certificate Image" 
-              class="certificate-image" />
-          {% endif %}
-        {% else %}
-          <p class="no-certificate">No certificate uploaded</p>
-        {% endif %}
-      </div>
-    {% endfor %}
+  <h2> ACHIEVEMENT & CERTIFICATES </h2>
+  <div class="achievement-container">
+    <div class="achievement-card">
+      <img src="{{ url_for('static', filename='certificates/certificate1.png') }}" alt="Certificate 1">
+      <h3>AICTE Internship</h3>
+      <p>Completed a AICTE certified Internship on MS Azure by Edunet Foundation. June 2025.</p>
+    </div>
+    <div class="achievement-card">
+      <img src="{{ url_for('static', filename='certificates/certificate2.png') }}" alt="Certificate 2">
+      <h3>Cyber Job Simulation  Deloitte </h3>
+      <p>Hands-on experience in simulated cyber attack environments. July 2025.</p>
+    </div>
+    <div class="achievement-card">
+    <img src="{{ url_for('static', filename='certificates/certifiacte3.png') }}" alt="Certificate 3">
+    <h3>Data Visualization Certification | TATA</h3>
+    <p>Completed in June 2025, covering practical skills in business framing, visual creation, and insight communication.</p>
+    </div>
   </div>
+    
 </section>
-
 
 <section class="contact" id="contact">
   <div class="contact-container">
@@ -178,7 +164,7 @@
       <p>Feel free to reach out for collaborations or just a friendly hello!</p>
       <div class="contact-details">
         <p><i class="fas fa-envelope"></i> swarooprout9848@gmail.com</p>
-        <p><i class="fab fa-telegram-plane"></i> @not_inertial</p>
+        <p><i class="fab fa-telegram-plane"></i> <a href="https://t.me/not_inertial" target="_blank">Telegram</a></p>
         <p><i class="fab fa-linkedin"></i> <a href="https://www.linkedin.com/in/swaroop-ranjan-2ba361245/" target="_blank">LinkedIn</a></p>
         <p><i class="fab fa-github"></i> <a href="https://github.com/Rinku-47" target="_blank">GitHub</a></p>
       </div>

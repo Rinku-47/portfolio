@@ -23,36 +23,6 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
-# ✅ Create tables if not exists
-def init_db():
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute('''CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT UNIQUE,
-        password_hash TEXT
-    )''')
-    cursor.execute('''CREATE TABLE IF NOT EXISTS feedbacks (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT,
-        email TEXT,
-        message TEXT
-    )''')
-    cursor.execute('''CREATE TABLE IF NOT EXISTS achievements (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT,
-        description TEXT,
-        certificate_filename TEXT
-    )''')
-    cursor.execute('''CREATE TABLE IF NOT EXISTS projects (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT,
-        description TEXT,
-        link TEXT
-    )''')
-    conn.commit()
-    conn.close()
-
 # ✅ Flask-Login setup
 login_manager = LoginManager()
 login_manager.login_view = 'login'
@@ -207,7 +177,6 @@ def manage_achievements():
 if __name__ == '__main__':
     if not os.path.exists(UPLOAD_FOLDER):
         os.makedirs(UPLOAD_FOLDER)
-    init_db()
     app.run(debug=True)
 
 

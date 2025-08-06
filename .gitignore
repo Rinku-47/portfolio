@@ -1,33 +1,5 @@
-# Byte-compiled / cache files
-__pycache__/
-*.py[cod]
-*.pyo
-*.pyd
-
-# Environment variables
 .env
-
-# Instance folder (Flask runtime data)
+*.db
+__pycache__/
+*.pyc
 instance/
-
-# IDE and OS files
-*.log
-*.sqlite3
-.DS_Store
-.vscode/
-.idea/
-*.swp
-
-# Python virtual environments
-venv/
-env/
-
-# Uploads or user-generated files
-static/certificates/
-uploads/
-
-# Flask session or debug files
-*.bak
-*.tmp
-*.log
-*.pid
